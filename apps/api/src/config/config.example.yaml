@@ -31,6 +31,10 @@ apis:
   multiversx:
     api: https://devnet-api.multiversx.com
     gateway: https://devnet-gateway.multiversx.com
+  github:
+    clientId: x
+    webhookSecret: x
+    apiKey: x
 nativeAuth:
   maxExpiryInSeconds: 7200
   acceptedOrigins:
