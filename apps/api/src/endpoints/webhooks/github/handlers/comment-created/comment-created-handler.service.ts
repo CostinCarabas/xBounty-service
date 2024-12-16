@@ -11,11 +11,14 @@ export class CommentCreatedHandlerService {
   async execute(
     input: GithubWebhookInput,
   ): Promise<void> {
+    console.log('input :>> ', input);
     const owner = input.repository.owner.login;
     const repo = input.repository.name;
     const issueNumber = input.issue.number;
     const body = 'Hello, World!';
+    const installationId = input.installation.id;
     await this.githubApiService.createIssueComment(
+      installationId,
       owner,
       repo,
       issueNumber,

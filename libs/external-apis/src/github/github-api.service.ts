@@ -12,10 +12,6 @@ export class GithubApiService {
     private readonly httpService: HttpService,
   ) { }
 
-  // onModuleInit() {
-  //   this.getAccessToken(1);
-  // }
-
   async generateJwt() {
     const payload = {
       iat: Math.floor(Date.now() / 1000),
@@ -53,21 +49,28 @@ export class GithubApiService {
   }
 
   async createIssueComment(
+    installationId: number,
     owner: string,
     repo: string,
     issueNumber: number,
     body: string,
   ) {
-    console.log('owner :>> ', owner);
-    console.log('repo :>> ', repo);
-    console.log('issueNumber :>> ', issueNumber);
-    console.log('body :>> ', body);
-    // return this.octokitService.rest.issues.createComment({
-    //   owner,
-    //   repo,
-    //   issue_number: issueNumber,
-    //   body,
-    // });
+    const accessToken = await this.getAccessToken(installationId);
+    const response = await this.httpService.post(
+      `repos/${owner}/${repo}/issues/${issueNumber}/comments`,
+      {
+        body,
+      },
+      {
+        baseURL: 'https://api.github.com',
+        headers: {
+          Authorization: `token ${accessToken}`,
+          Accept: 'application/vnd.github.v3+json',
+        },
+      },
+    );
+
+    return response.data;
   }
 
   // async queryRepos() {

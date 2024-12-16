@@ -10,6 +10,7 @@ export class GithubWebhookService {
   ) { }
 
   async execute(input: GithubWebhookInput): Promise<void> {
+    console.log('input :>> ', input);
     switch (input.action) {
       case ActionTypeEnum.Created:
         return await this.handleTypeCreated(input);
