@@ -1,5 +1,5 @@
 import {
-  ApisConfigurationInterface, EnvConfigurationEnum,
+  ApisConfigurationInterface, ContractsConfigurationInterface, EnvConfigurationEnum,
   GithubApiConfigurationInterface,
   MultiversXApisConfigurationInterface, NativeAuthConfigurationInterface,
   RabbitConfigurationInterface, RedisConfigurationInterface, SqlDatabaseConfigurationInterface,
@@ -59,4 +59,8 @@ export const getNativeAuthConfiguration = (): NativeAuthConfigurationInterface =
 
 export const getGithubApiConfiguration = (): GithubApiConfigurationInterface => {
   return getApisConfiguration().github;
+};
+
+export const getContractsConfiguration = (): ContractsConfigurationInterface => {
+  return configFactory().contracts;
 };

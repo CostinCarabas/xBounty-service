@@ -2,11 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { GithubApiService } from '@XBounty/external-apis';
 import { GithubWebhookInput } from '../../models/github-webhook.input';
 import { FundTxInfo } from './fund-tx-info';
+import { TransactionGeneratorService } from '@XBounty/core';
 
 @Injectable()
 export class CommentCreatedHandlerService {
   constructor(
     private readonly githubApiService: GithubApiService,
+    private readonly transactionGeneratorService: TransactionGeneratorService,
   ) { }
 
   async execute(
@@ -40,7 +42,7 @@ export class CommentCreatedHandlerService {
           return false;
         }
         const txInfo = {
-          amount: Number(parts[2]),
+          amount: parts[2],
           repo: input.repository.name,
           issueNumber: input.issue.number,
         };
@@ -59,13 +61,29 @@ export class CommentCreatedHandlerService {
     const repo = input.repository.name;
     const issueNumber = input.issue.number;
     const installationId = input.installation.id;
-    const body = JSON.stringify(parsedBody);
+
+    const qrCode = await this.transactionGeneratorService.execute(
+      parsedBody.amount,
+      repo,
+      issueNumber,
+    );
+    if (qrCode == null) {
+      await this.githubApiService.createIssueComment(
+        installationId,
+        owner,
+        repo,
+        issueNumber,
+        'Failed to generate QR code',
+      );
+      return;
+    }
+
     await this.githubApiService.createIssueComment(
       installationId,
       owner,
       repo,
       issueNumber,
-      body,
+      qrCode,
     );
   }
 

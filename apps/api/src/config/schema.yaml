@@ -47,3 +47,5 @@ nativeAuth:
   acceptedOrigins:
     type: array
     items: string
+contracts:
+  xBounty: string

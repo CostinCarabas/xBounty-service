@@ -1,5 +1,5 @@
 export class FundTxInfo {
-  amount: number;
+  amount: string;
   repo: string;
   issueNumber: number;
 }

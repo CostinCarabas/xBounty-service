@@ -1,5 +1,5 @@
 import {
-  ApisConfigurationInterface, EnvConfigurationEnum,
+  ApisConfigurationInterface, ContractsConfigurationInterface, EnvConfigurationEnum,
   NativeAuthConfigurationInterface,
   RabbitConfigurationInterface, RedisConfigurationInterface, SqlDatabaseConfigurationInterface,
 } from '@XBounty/config';
@@ -16,4 +16,5 @@ export interface ConfigurationInterface {
   apis: ApisConfigurationInterface;
   rabbit: RabbitConfigurationInterface;
   nativeAuth: NativeAuthConfigurationInterface;
+  contracts: ContractsConfigurationInterface;
 }
