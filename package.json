@@ -79,7 +79,7 @@
     "@types/express": "^5.0.0",
     "@types/jest": "^29.5.14",
     "@types/js-yaml": "^4.0.9",
-    "@types/node": "^22.7.9",
+    "@types/node": "^22.10.2",
     "@types/passport": "^1.0.16",
     "@types/passport-jwt": "^4.0.1",
     "@types/qrcode": "^1.5.5",
