@@ -37,3 +37,10 @@ crons:
   transactionProcessor: boolean
 disabledConsumers:
   newUser: boolean
+apis:
+  github:
+    url: string
+    clientId: string
+    webhookSecret: string
+    apiKey: string
+    privateKey: string

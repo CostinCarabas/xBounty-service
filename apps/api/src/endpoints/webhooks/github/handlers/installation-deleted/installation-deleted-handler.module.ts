@@ -3,7 +3,6 @@ import { ConfigUtils } from '@XBounty/common';
 import { AppInstallationsModule } from '@XBounty/core';
 import { getRedisConfiguration } from '../../../../../config';
 import { InstallationDeletedHandlerService } from './installation-deleted-handler.service';
-import { InstallationCreatedHandlerService } from '../installation-created/installation-created-handler.service';
 
 @Module({
   imports: [
@@ -15,7 +14,7 @@ import { InstallationCreatedHandlerService } from '../installation-created/insta
     InstallationDeletedHandlerService,
   ],
   exports: [
-    InstallationCreatedHandlerService,
+    InstallationDeletedHandlerService,
   ],
 })
-export class InstallationCreatedHandlerModule { }
+export class InstallationDeletedHandlerModule { }

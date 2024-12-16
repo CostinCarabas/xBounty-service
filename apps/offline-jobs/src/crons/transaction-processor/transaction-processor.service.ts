@@ -1,13 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { CacheService } from '@multiversx/sdk-nestjs-cache';
 import { Constants } from '@multiversx/sdk-nestjs-common';
-import { ShardTransaction, TransactionProcessor } from "@multiversx/sdk-transaction-processor";
+import { ShardTransaction, TransactionProcessor } from '@multiversx/sdk-transaction-processor';
+import { AppInstallationsService } from '@XBounty/core';
+import { GithubApiService } from '@XBounty/external-apis';
 
 @Injectable()
 export class TransactionProcessorService {
   private readonly transactionProcessor = new TransactionProcessor();
   constructor(
     private readonly cacheService: CacheService,
+    private readonly appInstallationsService: AppInstallationsService,
+    private readonly githubApiService: GithubApiService,
   ) {
     // this.cacheService.setRemote(this.getCacheKey(0), 6659536, this.getCacheTTL());
     // this.cacheService.setRemote(this.getCacheKey(1), 6659536, this.getCacheTTL());
@@ -19,42 +23,34 @@ export class TransactionProcessorService {
   async execute() {
     await this.transactionProcessor.start({
       gatewayUrl: 'https://devnet-api.multiversx.com',
-      maxLookBehind: 1200,
-      // eslint-disable-next-line require-await
-      onTransactionsReceived: async (_shardId, _nonce, transactions, _statistics) => {
+      maxLookBehind: 100,
 
+      onTransactionsReceived: async (
+        _shardId: unknown, _nonce: unknown, transactions: ShardTransaction[]) => {
         for (const transaction of transactions) {
           if (transaction.receiver === 'erd1qqqqqqqqqqqqqpgqxg2fkdys8drkyd0h2ngrzgp882le03z6d8sschy06e') {
             // console.log(transaction)
             switch (transaction.getDataFunctionName()) {
               case 'fund': {
-                const [repoOwner, repoName, issuerId] = this.getFundParsedArgs(transaction);
-                if (!repoOwner || !repoName || !issuerId) {
-                  return
-                }
-                // TODO: create comment
+                this.getFundParsedArgs(transaction);
                 break;
               }
               case 'register': {
-                const [repoOwner, repoName, issuerId, solverGithubUser] = this.getRegisterParsedArgs(transaction);
-                if (!repoOwner || !repoName || !issuerId || !solverGithubUser) {
-                  return
-                }
-                // TODO: create comment
+                this.getRegisterParsedArgs(transaction);
                 break;
               }
               default:
-                console.log(`Tx ${transaction.hash} with function name ${transaction.getDataFunctionName()} not handled!`)
+                console.log(`Tx ${transaction.hash} with function name ${transaction.getDataFunctionName()}` +
+                  ' not handled!');
                 break;
             }
           }
-
         }
       },
-      getLastProcessedNonce: async (shardId) => {
+      getLastProcessedNonce: async (shardId: number) => {
         return await this.cacheService.getRemote(this.getCacheKey(shardId));
       },
-      setLastProcessedNonce: async (shardId, nonce) => {
+      setLastProcessedNonce: async (shardId: number, nonce: number) => {
         await this.cacheService.setRemote(this.getCacheKey(shardId), nonce, this.getCacheTTL());
       },
     });
@@ -68,29 +64,48 @@ export class TransactionProcessorService {
     return Constants.oneMinute() * 5;
   }
 
-  private getFundParsedArgs(transaction: ShardTransaction) {
+  private async getFundParsedArgs(transaction: ShardTransaction) {
     const args = transaction.getDataArgs();
     if (args && args.length === 3) {
       const repoOwner = Buffer.from(args[0], 'hex').toString('utf-8');
       const repoName = Buffer.from(args[1], 'hex').toString('utf-8');
-      const issuerId = parseInt(args[2], 16);
+      const issueId = parseInt(args[2], 16);
 
-      return [repoOwner, repoName, issuerId];
+      const installationId = await this.appInstallationsService.getInstallation(repoOwner, repoName);
+      if (installationId == null) {
+        return;
+      }
+
+      await this.githubApiService.createIssueComment(
+        installationId,
+        repoOwner,
+        repoName,
+        issueId,
+        `Transaction with hash ${transaction.hash} funded the bounty!`,
+      );
     }
-    return []
   }
 
-  private getRegisterParsedArgs(transaction: ShardTransaction) {
+  private async getRegisterParsedArgs(transaction: ShardTransaction) {
     const args = transaction.getDataArgs();
     if (args && args.length === 4) {
       const repoOwner = Buffer.from(args[0], 'hex').toString('utf-8');
       const repoName = Buffer.from(args[1], 'hex').toString('utf-8');
       const issuerId = parseInt(args[2], 16);
       const solverGithubUser = Buffer.from(args[3], 'hex').toString('utf-8');
-      return [repoOwner, repoName, issuerId, solverGithubUser];
+
+      const installationId = await this.appInstallationsService.getInstallation(repoOwner, repoName);
+      if (installationId == null) {
+        return;
+      }
+
+      await this.githubApiService.createIssueComment(
+        installationId,
+        repoOwner,
+        repoName,
+        issuerId,
+        `Transaction with hash ${transaction.hash} registered @${solverGithubUser} as a bounty hunter!`,
+      );
     }
-    return []
   }
-
-
 }

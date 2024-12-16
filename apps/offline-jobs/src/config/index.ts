@@ -1,5 +1,6 @@
 import {
   ApisConfigurationInterface, EnvConfigurationEnum,
+  GithubApiConfigurationInterface,
   MultiversXApisConfigurationInterface, RabbitConfigurationInterface, RedisConfigurationInterface,
   SqlDatabaseConfigurationInterface,
 } from '@XBounty/config';
@@ -60,4 +61,8 @@ export const getCronsConfiguration = (): CronsConfigurationInterface => {
 
 export const getDisabledConsumersConfiguration = (): DisabledConsumersConfigurationInterface => {
   return configFactory().disabledConsumers;
+};
+
+export const getGithubApiConfiguration = (): GithubApiConfigurationInterface => {
+  return getApisConfiguration().github;
 };
