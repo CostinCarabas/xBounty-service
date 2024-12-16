@@ -37,6 +37,7 @@ apis:
     api: string
     gateway: string
   github:
+    url: string
     clientId: string
     webhookSecret: string
     apiKey: string

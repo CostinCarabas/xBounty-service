@@ -1,21 +1,38 @@
 import { Injectable } from '@nestjs/common';
 import { GithubApiModuleOptions } from './options';
 import { JwtService } from '@nestjs/jwt';
-import { HttpService } from '@XBounty/http';
+import {
+  defaultDownstreamKeepAliveTimeout, getHttpAgent, getHttpsAgent, HttpService,
+} from '@XBounty/http';
 import { AccessTokenInfo } from './models/access-token-info';
+import { ErrorsUtils, Logger, TimeConstants } from '@XBounty/common';
+import { AxiosRequestConfig } from 'axios';
 
 @Injectable()
 export class GithubApiService {
+  private readonly httpAgent = getHttpAgent(defaultDownstreamKeepAliveTimeout);
+  private readonly httpsAgent = getHttpsAgent(defaultDownstreamKeepAliveTimeout);
+
   constructor(
     private readonly options: GithubApiModuleOptions,
     private readonly jwtService: JwtService,
     private readonly httpService: HttpService,
+    private readonly logger: Logger,
   ) { }
+
+  private getConfig = (): AxiosRequestConfig => {
+    return {
+      baseURL: this.options.url,
+      httpAgent: this.httpAgent,
+      httpsAgent: this.httpsAgent,
+      timeout: 5000,
+    };
+  };
 
   async generateJwt() {
     const payload = {
       iat: Math.floor(Date.now() / 1000),
-      exp: Math.floor(Date.now() / 1000) + 600,
+      exp: Math.floor(Date.now() / 1000) + TimeConstants.oneMinute * 5,
       iss: this.options.clientId,
     };
 
@@ -33,7 +50,7 @@ export class GithubApiService {
         `app/installations/${installationId}/access_tokens`,
         {},
         {
-          baseURL: 'https://api.github.com',
+          ...this.getConfig(),
           headers: {
             Authorization: `Bearer ${jwt}`,
             Accept: 'application/vnd.github+json',
@@ -43,7 +60,9 @@ export class GithubApiService {
 
       return response?.data?.token; // Access token
     } catch (error) {
-      console.error('error :>> ', error);
+      this.logger.error('Failed to get access token', {
+        error: ErrorsUtils.getError(error),
+      });
       return;
     }
   }
@@ -55,31 +74,28 @@ export class GithubApiService {
     issueNumber: number,
     body: string,
   ) {
-    const accessToken = await this.getAccessToken(installationId);
-    const response = await this.httpService.post(
-      `repos/${owner}/${repo}/issues/${issueNumber}/comments`,
-      {
-        body,
-      },
-      {
-        baseURL: 'https://api.github.com',
-        headers: {
-          Authorization: `token ${accessToken}`,
-          Accept: 'application/vnd.github.v3+json',
+    try {
+      const accessToken = await this.getAccessToken(installationId);
+      const response = await this.httpService.post(
+        `repos/${owner}/${repo}/issues/${issueNumber}/comments`,
+        {
+          body,
         },
-      },
-    );
+        {
+          ...this.getConfig(),
+          headers: {
+            Authorization: `token ${accessToken}`,
+            Accept: 'application/vnd.github.v3+json',
+          },
+        },
+      );
 
-    return response.data;
+      return response.data;
+    } catch (error) {
+      this.logger.error('Failed to create issue comment', {
+        error: ErrorsUtils.getError(error),
+      });
+      return;
+    }
   }
-
-  // async queryRepos() {
-  //   const response = await this.octokitService.rest.search.repos({
-  //     q: 'nest-js',
-  //   });
-
-  //   console.log('response :>> ', response);
-
-  //   return response.data.items;
-  // }
 }
