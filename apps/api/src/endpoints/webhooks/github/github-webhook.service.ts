@@ -5,12 +5,16 @@ import { CommentCreatedHandlerService } from './handlers/comment-created/comment
 import {
   InstallationCreatedHandlerService,
 } from './handlers/installation-created/installation-created-handler.service';
+import {
+  InstallationDeletedHandlerService,
+} from './handlers/installation-deleted/installation-deleted-handler.service';
 
 @Injectable()
 export class GithubWebhookService {
   constructor(
     private readonly commentCreatedHandlerService: CommentCreatedHandlerService,
     private readonly installationCreatedHandlerService: InstallationCreatedHandlerService,
+    private readonly installationDeletedHandlerService: InstallationDeletedHandlerService,
   ) { }
 
   async execute(input: GithubWebhookInput): Promise<void> {
@@ -18,6 +22,8 @@ export class GithubWebhookService {
     switch (input.action) {
       case ActionTypeEnum.Created:
         return await this.handleTypeCreated(input);
+      case ActionTypeEnum.Deleted:
+        return await this.handleTypeDeleted(input);
     }
   }
 
@@ -27,6 +33,12 @@ export class GithubWebhookService {
     }
     if ('installation' in input) {
       return await this.installationCreatedHandlerService.execute(input);
+    }
+  }
+
+  private async handleTypeDeleted(input: GithubWebhookInput): Promise<void> {
+    if ('installation' in input) {
+      return await this.installationDeletedHandlerService.execute(input);
     }
   }
 }
