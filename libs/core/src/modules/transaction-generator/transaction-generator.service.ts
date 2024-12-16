@@ -110,8 +110,9 @@ export class TransactionGeneratorService {
     const repoOwnerHex = Buffer.from(repoOwner, 'utf8').toString('hex');
     const repoHex = Buffer.from(repo, 'utf8').toString('hex');
     const issueNumberHex = this.padHex(issueNumber.toString(16));
+    const githubUserHex = Buffer.from(githubUser, 'utf8').toString('hex');
 
-    return `register@${repoOwnerHex}@${repoHex}@${issueNumberHex}@${githubUser}`;
+    return `register@${repoOwnerHex}@${repoHex}@${issueNumberHex}@${githubUserHex}`;
   }
 
   private async generateQRCodeFromBIP21(bip21String: string): Promise<string | undefined> {

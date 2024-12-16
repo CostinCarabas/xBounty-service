@@ -2,11 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { GithubWebhookInput } from './models/github-webhook.input';
 import { ActionTypeEnum } from './models/action-type.enum';
 import { CommentCreatedHandlerService } from './handlers/comment-created/comment-created-handler.service';
+import {
+  InstallationCreatedHandlerService,
+} from './handlers/installation-created/installation-created-handler.service';
 
 @Injectable()
 export class GithubWebhookService {
   constructor(
     private readonly commentCreatedHandlerService: CommentCreatedHandlerService,
+    private readonly installationCreatedHandlerService: InstallationCreatedHandlerService,
   ) { }
 
   async execute(input: GithubWebhookInput): Promise<void> {
@@ -20,6 +24,9 @@ export class GithubWebhookService {
   private async handleTypeCreated(input: GithubWebhookInput): Promise<void> {
     if ('comment' in input) {
       return await this.commentCreatedHandlerService.execute(input);
+    }
+    if ('installation' in input) {
+      return await this.installationCreatedHandlerService.execute(input);
     }
   }
 }

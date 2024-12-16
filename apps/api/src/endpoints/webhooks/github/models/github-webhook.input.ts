@@ -229,5 +229,13 @@ export class GithubWebhookInput {
   installation: {
     id: number;
     node_id: string;
+    client_id?: string;
+    account?: {
+      login: string;
+      id: number;
+    }
   };
+  repositories: {
+    name: string;
+  }[];
 }
