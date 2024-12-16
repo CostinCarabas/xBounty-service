@@ -29,6 +29,7 @@ rabbit:
   uri: 'amqp://guest:guest@localhost:5672'
 apis:
   multiversx:
+    wallet: https://devnet-wallet.multiversx.com
     api: https://devnet-api.multiversx.com
     gateway: https://devnet-gateway.multiversx.com
   github:

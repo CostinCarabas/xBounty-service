@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { CommentCreatedHandlerService } from './comment-created-handler.service';
 import { GithubApiModule } from '@XBounty/external-apis';
-import { getContractsConfiguration, getGithubApiConfiguration } from '../../../../../config';
+import { getApisConfiguration, getContractsConfiguration, getGithubApiConfiguration } from '../../../../../config';
 import { TransactionGeneratorModule } from '@XBounty/core';
 
 @Module({
@@ -10,6 +10,7 @@ import { TransactionGeneratorModule } from '@XBounty/core';
     TransactionGeneratorModule.register(
       {
         contract: getContractsConfiguration().xBounty,
+        walletUrl: getApisConfiguration().multiversx.wallet,
       },
     ),
   ],
