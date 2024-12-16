@@ -34,5 +34,6 @@ rabbit:
 crons:
   eachClusterCron: boolean
   globalCron: boolean
+  transactionProcessor: boolean
 disabledConsumers:
   newUser: boolean
