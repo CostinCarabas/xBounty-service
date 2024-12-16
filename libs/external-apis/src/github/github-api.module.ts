@@ -2,8 +2,7 @@ import { DynamicModule, Module } from '@nestjs/common';
 import { GithubApiModuleOptions } from './options';
 import { HttpModule } from '@XBounty/http';
 import { GithubApiService } from './github-api.service';
-import { OctokitModule } from 'nestjs-octokit';
-import { createAppAuth } from '@octokit/auth-app';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({})
 export class GithubApiModule {
@@ -13,22 +12,23 @@ export class GithubApiModule {
     return {
       module: GithubApiModule,
       imports: [
+        JwtModule.register({}),
         HttpModule,
-        OctokitModule.forRootAsync({
-          useFactory: () => {
-            console.log('options :>> ', options);
-            return {
-              // isGlobal: true,
-              octokitOptions: {
-                authStrategy: createAppAuth,
-                auth: {
-                  appId: options.appId,
-                  privateKey: options.apiKey,
-                },
-              },
-            };
-          },
-        }),
+        // OctokitModule.forRootAsync({
+        //   useFactory: () => {
+        //     console.log('options :>> ', options);
+        //     return {
+        //       // isGlobal: true,
+        //       octokitOptions: {
+        //         authStrategy: createAppAuth,
+        //         auth: {
+        //           appId: options.appId,
+        //           privateKey: options.apiKey,
+        //         },
+        //       },
+        //     };
+        //   },
+        // }),
       ],
       providers: [
         {

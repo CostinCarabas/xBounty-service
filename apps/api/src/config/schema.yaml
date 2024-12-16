@@ -40,6 +40,7 @@ apis:
     clientId: string
     webhookSecret: string
     apiKey: string
+    privateKey: string
 nativeAuth:
   maxExpiryInSeconds: integer
   acceptedOrigins:

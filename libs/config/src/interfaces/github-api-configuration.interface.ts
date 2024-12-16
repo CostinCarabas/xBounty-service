@@ -1,5 +1,6 @@
 export interface GithubApiConfigurationInterface {
-  appId: string;
+  clientId: string;
   apiKey: string;
   webhookSecret: string;
+  privateKey: string;
 }

@@ -1,4 +1,6 @@
 export class GithubApiModuleOptions {
-  appId: string;
+  clientId: string;
   apiKey: string;
+  privateKey: string;
+  webhookSecret: string;
 }

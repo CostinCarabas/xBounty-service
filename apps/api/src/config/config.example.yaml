@@ -35,6 +35,7 @@ apis:
     clientId: x
     webhookSecret: x
     apiKey: x
+    privateKey: x
 nativeAuth:
   maxExpiryInSeconds: 7200
   acceptedOrigins:
