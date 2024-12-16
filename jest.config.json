@@ -1,0 +1,30 @@
+{ 
+  "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+  ],
+  "rootDir": ".",
+  "testRegex": ".*\\.spec\\.ts$",
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "collectCoverageFrom": [
+    "**/*.(t|j)s"
+  ],
+  "coverageDirectory": "./coverage",
+  "testEnvironment": "node",
+  "roots": [
+    "<rootDir>/apps/",
+    "<rootDir>/libs/"
+  ],
+  "moduleNameMapper": {
+    "^@XBounty/config(|/.*)$": "<rootDir>/libs/config/src/$1",
+    "^@XBounty/common(|/.*)$": "<rootDir>/libs/common/src/$1",
+    "^@XBounty/http(|/.*)$": "<rootDir>/libs/http/src/$1",
+    "^@XBounty/db(|/.*)$": "<rootDir>/libs/db/src/$1",
+    "^@XBounty/db-loaders(|/.*)$": "<rootDir>/libs/db-loaders/src/$1",
+    "^@XBounty/core(|/.*)$": "<rootDir>/libs/core/src/$1",
+    "^@XBounty/external-apis(|/.*)$": "<rootDir>/libs/external-apis/src/$1"
+  }
+}

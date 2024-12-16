@@ -1,0 +1,38 @@
+env: development
+keepAliveTimeoutUpstream: 60000
+port: 3000
+serviceName: api
+sqlDatabase:
+  host: 127.0.0.1
+  port: 3324
+  database: x-bounty-app-db
+  username: root
+  password: root
+  connectionLimit: 10
+  migrations:
+    - dist/libs/db/src/migrations/*.js
+  entities:
+    - dist/libs/db/src/entities/*.js
+  replicas:
+    - host: 127.0.0.1
+      port: 3324
+      username: root
+      password: root
+      database: x-bounty-app-db
+redis:
+  host: localhost
+  port: 6379
+commonRedis:
+  host: localhost
+  port: 6385
+rabbit:
+  uri: 'amqp://guest:guest@localhost:5672'
+apis:
+  multiversx:
+    api: https://devnet-api.multiversx.com
+    gateway: https://devnet-gateway.multiversx.com
+nativeAuth:
+  maxExpiryInSeconds: 7200
+  acceptedOrigins:
+    - 'localhost'
+    - 'https://utils.multiversx.com'

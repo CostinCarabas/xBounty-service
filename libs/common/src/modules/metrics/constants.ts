@@ -1,0 +1,1 @@
+export const PROVIDER_TOKEN = 'METRICS_PROVDER_TOKEN';

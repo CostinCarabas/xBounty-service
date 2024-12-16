@@ -1,0 +1,47 @@
+title: config
+env: string
+keepAliveTimeoutUpstream: integer
+port: integer
+serviceName: string
+sqlDatabase:
+  host: string
+  port: integer
+  database: string
+  username: string
+  password: string
+  connectionLimit: integer
+  migrations:
+    type: array
+    items: string
+  entities:
+    type: array
+    items: string
+  replicas:
+    type: array
+    items: 
+      host: string
+      port: integer
+      username: string
+      password: string
+      database: string
+redis:
+  host: string
+  port: integer
+commonRedis:
+  host: string
+  port: integer
+rabbit:
+  uri: string
+apis:
+  multiversx:
+    api: string
+    gateway: string
+  github:
+    clientId: string
+    webhookSecret: string
+    apiKey: string
+nativeAuth:
+  maxExpiryInSeconds: integer
+  acceptedOrigins:
+    type: array
+    items: string

@@ -1,26 +1,59 @@
-# xBounty-service
+## Description
 
-xBounty is a GitHub App that seamlessly integrates blockchain-powered bounties into your development workflow. Built on MultiversX blockchain, it allows repository maintainers to incentivize contributions by attaching EGLD rewards to GitHub issues.
+[NestJS](https://github.com/nestjs/nest) Monorepo Template.
 
-## How it works
+## Installation
 
-1. **Create Bounty**: Create a GitHub issue with the "bounty" label and specify the EGLD amount
-2. **Fund Task**: Scan the QR code or use the deep link to fund the bounty using xPortal or any MultiversX wallet
-3. **Solve Issue**: Developers submit Pull Requests to solve the bounty issue
-4. **Get Reward**: Upon PR merge, the bounty is automatically transferred to the contributor
+```bash
+$ yarn install
+```
 
-## Features
+## Setup
 
-- 🔒 Secure blockchain-based payments
-- 📱 One-click funding with QR codes and mobile wallet support
-- 🤝 Transparent bounty tracking
-- ⚡ Automatic reward distribution
-- 🔗 Native GitHub issues integration
+```bash
+# Docker Setup
+$ docker-compose up -d
 
-## Why xBounty?
+# API Config Setup
+$ touch apps/api/src/config/config.yaml && cp ./apps/api/src/config/config.example.yaml ./apps/api/src/config/config.yaml
 
-- Incentivize open-source contributions
-- Streamline bounty management
-- Guarantee payment security
-- Build contributor trust
-- Enhance community engagement
+# Offline Jobs Config Setup
+$ touch apps/offline-jobs/src/config/config.yaml && cp ./apps/offline-jobs/src/config/config.example.yaml ./apps/offline-jobs/src/config/config.yaml
+
+# Typeorm Config Setup (for migrations)
+$ touch typeorm.config.ts && cp ./typeorm.config.example.ts ./typeorm.config.ts
+```
+
+## Personalization
+
+Replace all `@XBounty` occurences with your app name.
+
+Replace all `x-bounty-app-db` occurences with your db name.
+
+Replace `XBounty` from `microservice.configurator.ts` with your app name.
+
+## Running the app
+
+API
+
+```bash
+# development
+$ yarn start:dev
+
+# production mode
+$ yarn start
+```
+
+Offline Jobs
+
+```bash
+# development
+$ yarn start:offline-jobs:dev
+
+# production mode
+$ yarn start:offline-jobs
+```
+
+## Swagger
+
+Swagger is on [/api-docs](http://localhost:3000/api-docs) endpoint of API instance.

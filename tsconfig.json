@@ -1,0 +1,63 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es2017",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "allowJs": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "strictBindCallApply": false,
+    "alwaysStrict": true,
+    "allowUnreachableCode": false,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
+    "importHelpers": true,
+    "strictPropertyInitialization": false,
+    "resolveJsonModule": true,
+    "typeRoots": [
+      "src/@types",
+      "node_modules/@types"
+    ],
+    "paths": {
+      "@XBounty/config": [
+        "libs/config/src"
+      ],
+      "@XBounty/common": [
+        "libs/common/src"
+      ],
+      "@XBounty/http": [
+        "libs/http/src"
+      ],
+      "@XBounty/db": [
+        "libs/db/src"
+      ],
+      "@XBounty/db-loaders": [
+        "libs/db-loaders/src"
+      ],
+      "@XBounty/common/setup/microservice.configurator": [
+        "libs/common/src/setup/microservice.configurator"
+      ],
+      "@XBounty/core": [
+        "libs/core/src"
+      ],
+      "@XBounty/external-apis": [
+        "libs/external-apis/src"
+      ],
+    }
+  }
+}
