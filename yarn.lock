@@ -812,6 +812,13 @@
     axios "^1.7.4"
     bip39 "3.1.0"
 
+"@multiversx/sdk-event-processor@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@multiversx/sdk-event-processor/-/sdk-event-processor-1.0.2.tgz#1e6f59f00a4bd89c1d3c388c955bc893f025e94d"
+  integrity sha512-/uHdvJaU7p6roPLgTnCtWhsdhwmmYatkbaG5Dzct5gvo0cQxVg28m0C2QeiX9A+VKMCW16hd/49B8hUjGghzSg==
+  dependencies:
+    axios "^1.7.7"
+
 "@multiversx/sdk-native-auth-server@^1.0.19":
   version "1.0.20"
   resolved "https://registry.yarnpkg.com/@multiversx/sdk-native-auth-server/-/sdk-native-auth-server-1.0.20.tgz#28f5e6dfbb2ea1880240598eda3de447101ed21c"
@@ -891,6 +898,13 @@
   integrity sha512-j43QsKquu8N51WLmVlJ7dV2P3A1448R7/ktvl8r3i6wRMpfdtzDPNofTdHmMRT7DdQdvs4+RNgz8hVKL11Etsw==
   dependencies:
     bech32 "^2.0.0"
+
+"@multiversx/sdk-transaction-processor@^0.1.35":
+  version "0.1.35"
+  resolved "https://registry.yarnpkg.com/@multiversx/sdk-transaction-processor/-/sdk-transaction-processor-0.1.35.tgz#88438ab2e71d5da2bcad9985777db316b4a355b5"
+  integrity sha512-zbj4zNYhIxjlnxy7/p7so4IroOd+Z3QtIvFkKJEg8HMGSAuF6dObmrmc4dsx8nzG97rFpOLJ7iSyE8Xk9sCvrQ==
+  dependencies:
+    axios "^1.7.4"
 
 "@multiversx/sdk-wallet@^4.5.0":
   version "4.6.0"
