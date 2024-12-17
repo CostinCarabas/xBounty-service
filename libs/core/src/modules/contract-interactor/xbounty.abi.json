@@ -1,0 +1,316 @@
+{
+    "buildInfo": {
+        "rustc": {
+            "version": "1.79.0",
+            "commitHash": "129f3b9964af4d4a709d1383930ade12dfe7c081",
+            "commitDate": "2024-06-10",
+            "channel": "Stable",
+            "short": "rustc 1.79.0 (129f3b996 2024-06-10)"
+        },
+        "contractCrate": {
+            "name": "x_bounty",
+            "version": "0.0.0"
+        },
+        "framework": {
+            "name": "multiversx-sc",
+            "version": "0.54.6"
+        }
+    },
+    "name": "XBounty",
+    "constructor": {
+        "inputs": [],
+        "outputs": []
+    },
+    "upgradeConstructor": {
+        "inputs": [],
+        "outputs": []
+    },
+    "endpoints": [
+        {
+            "name": "fund",
+            "mutability": "mutable",
+            "payableInTokens": [
+                "EGLD"
+            ],
+            "inputs": [
+                {
+                    "name": "repo_owner",
+                    "type": "bytes"
+                },
+                {
+                    "name": "repo_url",
+                    "type": "bytes"
+                },
+                {
+                    "name": "issue_id",
+                    "type": "u64"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "register",
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "repo_owner",
+                    "type": "bytes"
+                },
+                {
+                    "name": "repo_url",
+                    "type": "bytes"
+                },
+                {
+                    "name": "issue_id",
+                    "type": "u64"
+                },
+                {
+                    "name": "solver_github",
+                    "type": "bytes"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "releaseBounty",
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "repo_owner",
+                    "type": "bytes"
+                },
+                {
+                    "name": "repo_url",
+                    "type": "bytes"
+                },
+                {
+                    "name": "issue_id",
+                    "type": "u64"
+                },
+                {
+                    "name": "solver_addr",
+                    "type": "Address"
+                },
+                {
+                    "name": "solver_github",
+                    "type": "bytes"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "getBounty",
+            "mutability": "readonly",
+            "inputs": [
+                {
+                    "name": "repo_owner",
+                    "type": "bytes"
+                },
+                {
+                    "name": "repo_url",
+                    "type": "bytes"
+                },
+                {
+                    "name": "issue_id",
+                    "type": "u64"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "Option<Bounty>"
+                }
+            ]
+        },
+        {
+            "name": "getBountyIds",
+            "mutability": "readonly",
+            "inputs": [
+                {
+                    "name": "repo_owner",
+                    "type": "bytes"
+                },
+                {
+                    "name": "repo_url",
+                    "type": "bytes"
+                },
+                {
+                    "name": "issue_id",
+                    "type": "u64"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "Bounty"
+                }
+            ]
+        }
+    ],
+    "events": [
+        {
+            "identifier": "fund",
+            "inputs": [
+                {
+                    "name": "repo_owner",
+                    "type": "bytes",
+                    "indexed": true
+                },
+                {
+                    "name": "repo_url",
+                    "type": "bytes",
+                    "indexed": true
+                },
+                {
+                    "name": "issue_id",
+                    "type": "u64",
+                    "indexed": true
+                },
+                {
+                    "name": "amount",
+                    "type": "BigUint",
+                    "indexed": true
+                },
+                {
+                    "name": "proposer",
+                    "type": "Address",
+                    "indexed": true
+                }
+            ]
+        },
+        {
+            "identifier": "claim",
+            "inputs": [
+                {
+                    "name": "repo_owner",
+                    "type": "bytes",
+                    "indexed": true
+                },
+                {
+                    "name": "repo_url",
+                    "type": "bytes",
+                    "indexed": true
+                },
+                {
+                    "name": "issue_id",
+                    "type": "u64",
+                    "indexed": true
+                },
+                {
+                    "name": "solver_addr",
+                    "type": "Address",
+                    "indexed": true
+                },
+                {
+                    "name": "solver_github",
+                    "type": "bytes",
+                    "indexed": true
+                }
+            ]
+        },
+        {
+            "identifier": "complete",
+            "inputs": [
+                {
+                    "name": "repo_owner",
+                    "type": "bytes",
+                    "indexed": true
+                },
+                {
+                    "name": "repo_url",
+                    "type": "bytes",
+                    "indexed": true
+                },
+                {
+                    "name": "issue_id",
+                    "type": "u64",
+                    "indexed": true
+                },
+                {
+                    "name": "solver_addr",
+                    "type": "Address",
+                    "indexed": true
+                },
+                {
+                    "name": "solver_github",
+                    "type": "bytes",
+                    "indexed": true
+                },
+                {
+                    "name": "amount",
+                    "type": "BigUint",
+                    "indexed": true
+                }
+            ]
+        }
+    ],
+    "esdtAttributes": [],
+    "hasCallback": false,
+    "types": {
+        "Bounty": {
+            "type": "struct",
+            "fields": [
+                {
+                    "name": "repo_url",
+                    "type": "bytes"
+                },
+                {
+                    "name": "issue_id",
+                    "type": "u64"
+                },
+                {
+                    "name": "repo_owner",
+                    "type": "bytes"
+                },
+                {
+                    "name": "amount",
+                    "type": "BigUint"
+                },
+                {
+                    "name": "proposer",
+                    "type": "Address"
+                },
+                {
+                    "name": "solvers",
+                    "type": "List<Solver>"
+                },
+                {
+                    "name": "status",
+                    "type": "BountyStatus"
+                },
+                {
+                    "name": "created_at",
+                    "type": "u64"
+                }
+            ]
+        },
+        "BountyStatus": {
+            "type": "enum",
+            "variants": [
+                {
+                    "name": "Funded",
+                    "discriminant": 0
+                },
+                {
+                    "name": "Registered",
+                    "discriminant": 1
+                },
+                {
+                    "name": "Completed",
+                    "discriminant": 2
+                }
+            ]
+        },
+        "Solver": {
+            "type": "struct",
+            "fields": [
+                {
+                    "name": "solver_addr",
+                    "type": "Address"
+                },
+                {
+                    "name": "solver_github",
+                    "type": "bytes"
+                }
+            ]
+        }
+    }
+}
