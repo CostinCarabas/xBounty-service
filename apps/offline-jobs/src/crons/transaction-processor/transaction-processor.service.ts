@@ -14,16 +14,16 @@ export class TransactionProcessorService {
     private readonly appInstallationsService: AppInstallationsService,
     private readonly githubApiService: GithubApiService,
   ) {
-    // this.cacheService.setRemote(this.getCacheKey(0), 6659536, this.getCacheTTL());
-    // this.cacheService.setRemote(this.getCacheKey(1), 6659536, this.getCacheTTL());
-    // this.cacheService.setRemote(this.getCacheKey(2), 6659536, this.getCacheTTL());
-    // this.cacheService.setRemote(this.getCacheKey(4294967295), 6659536, this.getCacheTTL());
+    this.cacheService.setRemote(this.getCacheKey(0), 6659536, this.getCacheTTL());
+    this.cacheService.setRemote(this.getCacheKey(1), 6659536, this.getCacheTTL());
+    this.cacheService.setRemote(this.getCacheKey(2), 6659536, this.getCacheTTL());
+    this.cacheService.setRemote(this.getCacheKey(4294967295), 6659536, this.getCacheTTL());
   }
 
   async execute() {
     await this.transactionProcessor.start({
       gatewayUrl: 'https://devnet-gateway.multiversx.com',
-      maxLookBehind: 10,
+      maxLookBehind: 200,
 
       onTransactionsReceived: async (
         _shardId: unknown, _nonce: unknown, transactions: ShardTransaction[]) => {
@@ -119,6 +119,7 @@ export class TransactionProcessorService {
 
   private async sendCommentForReleaseBountyEvent(transaction: ShardTransaction) {
     const args = transaction.getDataArgs();
+    console.log('Found release bounty transaction with args:', args, transaction.hash);
     if (args && args.length === 5) {
       const repoOwner = Buffer.from(args[0], 'hex').toString('utf-8');
       const repoName = Buffer.from(args[1], 'hex').toString('utf-8');
@@ -136,7 +137,8 @@ export class TransactionProcessorService {
         repoOwner,
         repoName,
         issueId,
-        `Transaction with hash ${transaction.hash} released the bounty to @${solverGithubUser} with wallet address ${solverGithubAddr}!`,
+        `Transaction with hash ${transaction.hash} released the bounty to ` +
+        `@${solverGithubUser} with wallet address ${solverGithubAddr}!`,
       );
     }
   }
