@@ -5,6 +5,7 @@ import {
 import abi from './xbounty.abi.json';
 import { ContractInteractiorModuleOptions } from './options';
 import { Injectable } from '@nestjs/common';
+import { BountyInfo } from './models';
 @Injectable()
 export class ContractInteractorService {
   protected queryController: SmartContractQueriesController;
@@ -37,7 +38,7 @@ export class ContractInteractorService {
   /**
   *This is a view method. This will run a vm-query.
   */
-  async getBounty(options: { repoOwner: string; repoUrl: string; issueId: number }): Promise<unknown | undefined> {
+  async getBounty(options: { repoOwner: string; repoUrl: string; issueId: number }): Promise<BountyInfo | undefined> {
     const args: unknown[] = [];
 
     args.push(options.repoOwner);
@@ -60,10 +61,10 @@ export class ContractInteractorService {
           issue_id: item.issue_id.toNumber(),
           amount: item.amount.toNumber(),
           proposer: item.proposer.toString(),
-          solvers: item.solvers.map((solver: { solver_addr: any, solver_github: any }) => (
+          solvers: item.solvers.map((solver: { solver_addr: string, solver_github: string }) => (
             {
               solver_addr: solver.solver_addr.toString(),
-              solver_github: solver.solver_github.toString()
+              solver_github: solver.solver_github.toString(),
             })),
           status: item.status,
           created_at: item.created_at.toNumber(),

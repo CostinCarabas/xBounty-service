@@ -47,7 +47,6 @@ export class TransactionGeneratorService {
     return this.buildMdImage(qrCode);
   }
 
-
   async executeReleaseBountyTx(
     repoOwner: string,
     repo: string,
@@ -55,7 +54,6 @@ export class TransactionGeneratorService {
     solverAddr: string,
     solverGithub: string,
   ): Promise<string | undefined> {
-
     return this.generateWebWalletStringReleaseBountyTx(repoOwner, repo, issueNumber, solverAddr, solverGithub);
   }
 
@@ -116,7 +114,8 @@ export class TransactionGeneratorService {
     const data = this.generateDataReleaseBountyTx(repoOwner, repo, issueNumber, solverAddr, solverGithub);
 
     return `${this.options.walletUrl}/hook/transaction?receiver=${this.options.contract}` +
-      `&gasLimit=250000000&data=${data}&callbackUrl=https://github.com/${repoOwner}/${repo}/issues/${issueNumber}`;
+      `&value=0&gasLimit=25000000&data=${data}` +
+      `&callbackUrl=https://github.com/${repoOwner}/${repo}/issues/${issueNumber}`;
   }
 
   private generateDataFundTx(repoOwner: string, repo: string, issueNumber: number): string {
@@ -127,12 +126,12 @@ export class TransactionGeneratorService {
     return `fund@${repoOwnerHex}@${repoHex}@${issueNumberHex}`;
   }
 
-
-  private generateDataReleaseBountyTx(repoOwner: string, repo: string, issueNumber: number, solverAddr: string, solverGithub: string): string {
+  private generateDataReleaseBountyTx(
+    repoOwner: string, repo: string, issueNumber: number, solverAddr: string, solverGithub: string): string {
     const repoOwnerHex = Buffer.from(repoOwner, 'utf8').toString('hex');
     const repoHex = Buffer.from(repo, 'utf8').toString('hex');
     const issueNumberHex = this.padHex(issueNumber.toString(16));
-    const solverAddrHex = Address.fromBech32(solverAddr).hex()
+    const solverAddrHex = Address.fromBech32(solverAddr).hex();
     const solverGithubHex = Buffer.from(solverGithub, 'utf8').toString('hex');
     return `releaseBounty@${repoOwnerHex}@${repoHex}@${issueNumberHex}@${solverAddrHex}@${solverGithubHex}`;
   }
