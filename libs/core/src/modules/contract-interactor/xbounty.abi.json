@@ -49,6 +49,25 @@
             "outputs": []
         },
         {
+            "name": "cancelBounty",
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "repo_owner",
+                    "type": "bytes"
+                },
+                {
+                    "name": "repo_url",
+                    "type": "bytes"
+                },
+                {
+                    "name": "issue_id",
+                    "type": "u64"
+                }
+            ],
+            "outputs": []
+        },
+        {
             "name": "register",
             "mutability": "mutable",
             "inputs": [
@@ -122,6 +141,21 @@
             ]
         },
         {
+            "name": "getBountiesByStatus",
+            "mutability": "readonly",
+            "inputs": [
+                {
+                    "name": "status",
+                    "type": "BountyStatus"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "List<Bounty>"
+                }
+            ]
+        },
+        {
             "name": "getBountyIds",
             "mutability": "readonly",
             "inputs": [
@@ -141,6 +175,17 @@
             "outputs": [
                 {
                     "type": "Bounty"
+                }
+            ]
+        },
+        {
+            "name": "getAllBounties",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "variadic<Bounty>",
+                    "multi_result": true
                 }
             ]
         }
@@ -249,16 +294,16 @@
             "type": "struct",
             "fields": [
                 {
+                    "name": "repo_owner",
+                    "type": "bytes"
+                },
+                {
                     "name": "repo_url",
                     "type": "bytes"
                 },
                 {
                     "name": "issue_id",
                     "type": "u64"
-                },
-                {
-                    "name": "repo_owner",
-                    "type": "bytes"
                 },
                 {
                     "name": "amount",

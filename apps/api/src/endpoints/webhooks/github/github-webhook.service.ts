@@ -8,6 +8,7 @@ import {
 import {
   InstallationDeletedHandlerService,
 } from './handlers/installation-deleted/installation-deleted-handler.service';
+import { PullRequestClosedHandlerService } from './handlers/issue-closed/pull-request-closed-handler.service';
 
 @Injectable()
 export class GithubWebhookService {
@@ -15,6 +16,7 @@ export class GithubWebhookService {
     private readonly commentCreatedHandlerService: CommentCreatedHandlerService,
     private readonly installationCreatedHandlerService: InstallationCreatedHandlerService,
     private readonly installationDeletedHandlerService: InstallationDeletedHandlerService,
+    private readonly pullRequestClosedHandlerService: PullRequestClosedHandlerService,
   ) { }
 
   async execute(input: GithubWebhookInput): Promise<void> {
@@ -24,6 +26,8 @@ export class GithubWebhookService {
         return await this.handleTypeCreated(input);
       case ActionTypeEnum.Deleted:
         return await this.handleTypeDeleted(input);
+      case ActionTypeEnum.Closed:
+        return await this.handleTypeClosed(input);
     }
   }
 
@@ -39,6 +43,12 @@ export class GithubWebhookService {
   private async handleTypeDeleted(input: GithubWebhookInput): Promise<void> {
     if ('installation' in input) {
       return await this.installationDeletedHandlerService.execute(input);
+    }
+  }
+
+  private async handleTypeClosed(input: GithubWebhookInput): Promise<void> {
+    if ('pull_request' in input) {
+      return await this.pullRequestClosedHandlerService.execute(input);
     }
   }
 }

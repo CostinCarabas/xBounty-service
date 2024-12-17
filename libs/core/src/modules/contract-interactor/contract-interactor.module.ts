@@ -16,7 +16,9 @@ export class ContractInteractorModule {
         },
         ContractInteractorService,
       ],
-      exports: [ContractInteractorService],
+      exports: [
+        ContractInteractorService,
+      ],
     };
   }
 }

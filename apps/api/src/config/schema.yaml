@@ -34,6 +34,7 @@ rabbit:
   uri: string
 apis:
   multiversx:
+    chainId: string
     wallet: string
     api: string
     gateway: string

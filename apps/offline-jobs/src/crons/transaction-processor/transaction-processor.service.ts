@@ -17,13 +17,12 @@ export class TransactionProcessorService {
     // this.cacheService.setRemote(this.getCacheKey(1), 6659536, this.getCacheTTL());
     // this.cacheService.setRemote(this.getCacheKey(2), 6659536, this.getCacheTTL());
     // this.cacheService.setRemote(this.getCacheKey(4294967295), 6659536, this.getCacheTTL());
-
   }
 
   async execute() {
     await this.transactionProcessor.start({
-      gatewayUrl: 'https://devnet-api.multiversx.com',
-      maxLookBehind: 100,
+      gatewayUrl: 'https://devnet-gateway.multiversx.com',
+      maxLookBehind: 10,
 
       onTransactionsReceived: async (
         _shardId: unknown, _nonce: unknown, transactions: ShardTransaction[]) => {
@@ -66,6 +65,7 @@ export class TransactionProcessorService {
 
   private async getFundParsedArgs(transaction: ShardTransaction) {
     const args = transaction.getDataArgs();
+    console.log('Found fund transaction with args:', args, transaction.hash);
     if (args && args.length === 3) {
       const repoOwner = Buffer.from(args[0], 'hex').toString('utf-8');
       const repoName = Buffer.from(args[1], 'hex').toString('utf-8');
@@ -73,8 +73,11 @@ export class TransactionProcessorService {
 
       const installationId = await this.appInstallationsService.getInstallation(repoOwner, repoName);
       if (installationId == null) {
+        console.log('Installation not found for', repoOwner, repoName);
         return;
       }
+
+      console.log('Creating comment for', repoOwner, repoName, issueId);
 
       await this.githubApiService.createIssueComment(
         installationId,

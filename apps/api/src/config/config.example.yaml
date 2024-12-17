@@ -32,6 +32,7 @@ apis:
     wallet: https://devnet-wallet.multiversx.com
     api: https://devnet-api.multiversx.com
     gateway: https://devnet-gateway.multiversx.com
+    chainId: 'D'
   github:
     url: https://api.github.com
     clientId: x
