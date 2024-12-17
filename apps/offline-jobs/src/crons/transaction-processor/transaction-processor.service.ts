@@ -14,10 +14,10 @@ export class TransactionProcessorService {
     private readonly appInstallationsService: AppInstallationsService,
     private readonly githubApiService: GithubApiService,
   ) {
-    this.cacheService.setRemote(this.getCacheKey(0), 6659536, this.getCacheTTL());
-    this.cacheService.setRemote(this.getCacheKey(1), 6659536, this.getCacheTTL());
-    this.cacheService.setRemote(this.getCacheKey(2), 6659536, this.getCacheTTL());
-    this.cacheService.setRemote(this.getCacheKey(4294967295), 6659536, this.getCacheTTL());
+    // this.cacheService.setRemote(this.getCacheKey(0), 6659536, this.getCacheTTL());
+    // this.cacheService.setRemote(this.getCacheKey(1), 6659536, this.getCacheTTL());
+    // this.cacheService.setRemote(this.getCacheKey(2), 6659536, this.getCacheTTL());
+    // this.cacheService.setRemote(this.getCacheKey(4294967295), 6659536, this.getCacheTTL());
   }
 
   async execute() {
@@ -89,7 +89,8 @@ export class TransactionProcessorService {
         repoOwner,
         repoName,
         issueId,
-        `Transaction with hash ${transaction.hash} funded the bounty!`,
+        `Transaction https://devnet-explorer.multiversx.com/transactions/${transaction.hash} funded the bounty! ` +
+        'You can use "@xbounty register" to register as a bounty hunter!',
       );
     }
   }
@@ -112,7 +113,8 @@ export class TransactionProcessorService {
         repoOwner,
         repoName,
         issueId,
-        `Transaction with hash ${transaction.hash} registered @${solverGithubUser} as a bounty hunter!`,
+        `Transaction https://devnet-explorer.multiversx.com/transactions/${transaction.hash} ` +
+        `registered @${solverGithubUser} as a bounty hunter!`,
       );
     }
   }
@@ -137,7 +139,7 @@ export class TransactionProcessorService {
         repoOwner,
         repoName,
         issueId,
-        `Transaction with hash ${transaction.hash} released the bounty to ` +
+        `Transaction https://devnet-explorer.multiversx.com/transactions/${transaction.hash} released the bounty to ` +
         `@${solverGithubUser} with wallet address ${solverGithubAddr}!`,
       );
     }

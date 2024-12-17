@@ -24,7 +24,7 @@ export class CommentCreatedHandlerService {
   private async executeInternal(
     input: GithubWebhookInput,
   ): Promise<boolean> {
-    const body = input.comment.body;
+    const body = input.comment.body.trim();
     if (body == null || !body.toLowerCase().startsWith('@xbounty')) {
       // the issue comment should be ignored - it is not related to xbounty
       return true;

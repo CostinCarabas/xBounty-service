@@ -61,8 +61,8 @@ export class PullRequestClosedHandlerService {
       owner,
       repo,
       relatedIssueNumber,
-      `Please sign the following transaction in order to release the bounty ${txToBeSigned} ` +
-      `to @${solverInfo.solver_github}`,
+      'Please sign the following transaction in order to release the bounty' +
+      `to @${solverInfo.solver_github}: ${txToBeSigned}`,
     );
   }
 
