@@ -4,6 +4,7 @@ import { Constants } from '@multiversx/sdk-nestjs-common';
 import { ShardTransaction, TransactionProcessor } from '@multiversx/sdk-transaction-processor';
 import { AppInstallationsService } from '@XBounty/core';
 import { GithubApiService } from '@XBounty/external-apis';
+import { Address } from '@multiversx/sdk-core/out';
 
 @Injectable()
 export class TransactionProcessorService {
@@ -31,11 +32,15 @@ export class TransactionProcessorService {
             // console.log(transaction)
             switch (transaction.getDataFunctionName()) {
               case 'fund': {
-                this.getFundParsedArgs(transaction);
+                this.sendCommentForFundEvent(transaction);
                 break;
               }
               case 'register': {
-                this.getRegisterParsedArgs(transaction);
+                this.sendCommentForRegisterEvent(transaction);
+                break;
+              }
+              case 'releaseBounty': {
+                this.sendCommentForReleaseBountyEvent(transaction);
                 break;
               }
               default:
@@ -63,7 +68,7 @@ export class TransactionProcessorService {
     return Constants.oneMinute() * 5;
   }
 
-  private async getFundParsedArgs(transaction: ShardTransaction) {
+  private async sendCommentForFundEvent(transaction: ShardTransaction) {
     const args = transaction.getDataArgs();
     console.log('Found fund transaction with args:', args, transaction.hash);
     if (args && args.length === 3) {
@@ -89,12 +94,12 @@ export class TransactionProcessorService {
     }
   }
 
-  private async getRegisterParsedArgs(transaction: ShardTransaction) {
+  private async sendCommentForRegisterEvent(transaction: ShardTransaction) {
     const args = transaction.getDataArgs();
     if (args && args.length === 4) {
       const repoOwner = Buffer.from(args[0], 'hex').toString('utf-8');
       const repoName = Buffer.from(args[1], 'hex').toString('utf-8');
-      const issuerId = parseInt(args[2], 16);
+      const issueId = parseInt(args[2], 16);
       const solverGithubUser = Buffer.from(args[3], 'hex').toString('utf-8');
 
       const installationId = await this.appInstallationsService.getInstallation(repoOwner, repoName);
@@ -106,8 +111,32 @@ export class TransactionProcessorService {
         installationId,
         repoOwner,
         repoName,
-        issuerId,
+        issueId,
         `Transaction with hash ${transaction.hash} registered @${solverGithubUser} as a bounty hunter!`,
+      );
+    }
+  }
+
+  private async sendCommentForReleaseBountyEvent(transaction: ShardTransaction) {
+    const args = transaction.getDataArgs();
+    if (args && args.length === 5) {
+      const repoOwner = Buffer.from(args[0], 'hex').toString('utf-8');
+      const repoName = Buffer.from(args[1], 'hex').toString('utf-8');
+      const issueId = parseInt(args[2], 16);
+      const solverGithubAddr = Address.newFromHex(args[3]).toBech32();
+      const solverGithubUser = Buffer.from(args[4], 'hex').toString('utf-8');
+
+      const installationId = await this.appInstallationsService.getInstallation(repoOwner, repoName);
+      if (installationId == null) {
+        return;
+      }
+
+      await this.githubApiService.createIssueComment(
+        installationId,
+        repoOwner,
+        repoName,
+        issueId,
+        `Transaction with hash ${transaction.hash} released the bounty to @${solverGithubUser} with wallet address ${solverGithubAddr}!`,
       );
     }
   }
