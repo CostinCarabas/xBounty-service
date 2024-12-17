@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import QRCode from 'qrcode';
 import { TransactionGeneratorModuleOptions } from './options';
+import { Address } from '@multiversx/sdk-core/out';
 
 @Injectable()
 export class TransactionGeneratorService {
@@ -44,6 +45,18 @@ export class TransactionGeneratorService {
       return;
     }
     return this.buildMdImage(qrCode);
+  }
+
+
+  async executeReleaseBountyTx(
+    repoOwner: string,
+    repo: string,
+    issueNumber: number,
+    solverAddr: string,
+    solverGithub: string,
+  ): Promise<string | undefined> {
+
+    return this.generateWebWalletStringReleaseBountyTx(repoOwner, repo, issueNumber, solverAddr, solverGithub);
   }
 
   private generateBip21StringFundTx(
@@ -93,12 +106,35 @@ export class TransactionGeneratorService {
       `&gasLimit=250000000&data=${data}&callbackUrl=https://github.com/${repoOwner}/${repo}/issues/${issueNumber}`;
   }
 
+  private generateWebWalletStringReleaseBountyTx(
+    repoOwner: string,
+    repo: string,
+    issueNumber: number,
+    solverAddr: string,
+    solverGithub: string,
+  ): string {
+    const data = this.generateDataReleaseBountyTx(repoOwner, repo, issueNumber, solverAddr, solverGithub);
+
+    return `${this.options.walletUrl}/hook/transaction?receiver=${this.options.contract}` +
+      `&gasLimit=250000000&data=${data}&callbackUrl=https://github.com/${repoOwner}/${repo}/issues/${issueNumber}`;
+  }
+
   private generateDataFundTx(repoOwner: string, repo: string, issueNumber: number): string {
     const repoOwnerHex = Buffer.from(repoOwner, 'utf8').toString('hex');
     const repoHex = Buffer.from(repo, 'utf8').toString('hex');
     const issueNumberHex = this.padHex(issueNumber.toString(16));
 
     return `fund@${repoOwnerHex}@${repoHex}@${issueNumberHex}`;
+  }
+
+
+  private generateDataReleaseBountyTx(repoOwner: string, repo: string, issueNumber: number, solverAddr: string, solverGithub: string): string {
+    const repoOwnerHex = Buffer.from(repoOwner, 'utf8').toString('hex');
+    const repoHex = Buffer.from(repo, 'utf8').toString('hex');
+    const issueNumberHex = this.padHex(issueNumber.toString(16));
+    const solverAddrHex = Address.fromBech32(solverAddr).hex()
+    const solverGithubHex = Buffer.from(solverGithub, 'utf8').toString('hex');
+    return `releaseBounty@${repoOwnerHex}@${repoHex}@${issueNumberHex}@${solverAddrHex}@${solverGithubHex}`;
   }
 
   private generateDataRegisterTx(
